@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harrison Caudill</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #e8e0d0;
+      --bone: #c9b99a;
+      --rust: #8b3a1e;
+      --dust: #5c4a35;
+      --dark: #0e0c09;
+      --charcoal: #1a1714;
+      --mid: #2e2820;
+      --gold: #c4923a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(196,146,58,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease, width 0.25s ease, height 0.25s ease;
+    }
+    body:has(a:hover) .cursor, body:has(.gallery-item:hover) .cursor {
+      width: 16px; height: 16px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 3rem;
+      mix-blend-mode: normal;
+    }
+    nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(14,12,9,0.7) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .nav-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      color: var(--cream);
+      text-decoration: none;
+      position: relative;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      position: relative;
+    }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--bone);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://lh3.googleusercontent.com/pw/AP1GczPXfiH8liSt6JfZJqYkRWfUML_sZl6C4K2yGsg-0UfXWnEq19QIOiiyukSXMn1Key4EmPf3noD5akdT_7HLNa0YSh_mZdSXkF7_mZBHNAuVrYrtY8TV4aQHeM05lEHL4euW2pozc2fbdHNGElelHPftCQ=w1400-k-no');
+      background-size: cover;
+      background-position: center top;
+      filter: contrast(1.05) brightness(0.75);
+      transform: scale(1.05);
+      animation: heroZoom 12s ease-out forwards;
+    }
+    @keyframes heroZoom {
+      from { transform: scale(1.08); }
+      to   { transform: scale(1.0); }
+    }
+    .hero-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(14,12,9,0.1) 0%,
+        rgba(14,12,9,0) 30%,
+        rgba(14,12,9,0.3) 60%,
+        rgba(14,12,9,0.92) 100%
+      );
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 3rem 4rem;
+      width: 100%;
+      animation: fadeUp 1.2s 0.3s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 12vw, 11rem);
+      line-height: 0.88;
+      letter-spacing: 0.02em;
+      color: var(--cream);
+      display: block;
+    }
+    .hero-name span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--bone);
+    }
+    .hero-disciplines {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .hero-disciplines span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--bone);
+      opacity: 0.7;
+    }
+    .hero-disciplines .sep {
+      width: 3px; height: 3px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0.5;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      right: 3rem;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.5;
+      animation: fadeUp 1.5s 1s both;
+    }
+    .scroll-hint span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--bone), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleY(1); opacity: 0.5; }
+      50% { transform: scaleY(0.5); opacity: 0.2; }
+    }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 7rem 3rem; }
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: var(--cream);
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--charcoal);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .about-text-block {}
+    .about-quote {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.4;
+      color: var(--cream);
+      margin-bottom: 2.5rem;
+      border-left: 1px solid var(--gold);
+      padding-left: 2rem;
+    }
+    .about-body {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--bone);
+      margin-bottom: 2rem;
+    }
+    .about-img {
+      position: relative;
+    }
+    .about-img img {
+      width: 100%;
+      height: 600px;
+      object-fit: cover;
+      object-position: top center;
+      filter: grayscale(20%) contrast(1.1);
+      display: block;
+    }
+    .about-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(196,146,58,0.2);
+      transform: translate(12px, 12px);
+      pointer-events: none;
+    }
+    .about-img::before {
+      content: attr(data-credit);
+      position: absolute;
+      bottom: -1.5rem;
+      right: 0;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--dust);
+      text-transform: uppercase;
+    }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(196,146,58,0.35);
+      padding: 0.35rem 0.85rem;
+    }
+
+    /* ── GALLERY ── */
+    .gallery-section {
+      background: var(--dark);
+    }
+    .gallery-header {
+      max-width: 1400px;
+      margin: 0 auto 3rem;
+    }
+    .gallery-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 6px;
+    }
+    .gallery-item {
+      overflow: hidden;
+      position: relative;
+      background: var(--charcoal);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
+      filter: grayscale(15%) contrast(1.05);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.06);
+      filter: grayscale(0%) contrast(1.1);
+    }
+    .gallery-item .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(14,12,9,0);
+      transition: background 0.4s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.5rem;
+    }
+    .gallery-item:hover .overlay {
+      background: rgba(14,12,9,0.3);
+    }
+    .gallery-caption {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--bone);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .gallery-item:hover .gallery-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Grid layout - editorial asymmetry */
+    .gi-1 { grid-column: 1 / 6; grid-row: 1; height: 520px; }
+    .gi-2 { grid-column: 6 / 10; grid-row: 1; height: 520px; }
+    .gi-3 { grid-column: 10 / 13; grid-row: 1 / 3; height: 800px; }
+    .gi-4 { grid-column: 1 / 4; grid-row: 2; height: 280px; }
+    .gi-5 { grid-column: 4 / 10; grid-row: 2; height: 280px; }
+
+    /* ── DISCIPLINES ── */
+    .disciplines-section {
+      background: var(--mid);
+    }
+    .disciplines-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .disc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid rgba(196,146,58,0.2);
+      border-left: 1px solid rgba(196,146,58,0.2);
+      margin-top: 3rem;
+    }
+    .disc-item {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid rgba(196,146,58,0.2);
+      border-bottom: 1px solid rgba(196,146,58,0.2);
+      transition: background 0.3s;
+    }
+    .disc-item:hover {
+      background: rgba(196,146,58,0.05);
+    }
+    .disc-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: rgba(196,146,58,0.15);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .disc-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+    .disc-desc {
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--bone);
+      opacity: 0.8;
+    }
+
+    /* ── MURAL FEATURE ── */
+    .mural-section {
+      background: var(--dark);
+      padding: 0;
+      position: relative;
+      height: 80vh;
+      overflow: hidden;
+    }
+    .mural-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://lh3.googleusercontent.com/pw/AP1GczPEhwL2IErYPQhmyIGdq8EDubBqc769hYBK2MDWAaSAoE6UPN0q-yl0LuxRMlwcAMHztuH5xxOwN5MV1y1I4isydqr9XWG0WoCUQxPgm6K1tYTChb82hPGabQe_VveACScLNPrPP7t5GmF7BlrRX_oXzg=w1400-k-no');
+      background-size: cover;
+      background-position: center;
+      filter: saturate(1.2) brightness(0.7);
+    }
+    .mural-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(14,12,9,0.85) 0%, rgba(14,12,9,0.2) 60%, rgba(14,12,9,0.5) 100%);
+    }
+    .mural-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 3rem;
+      max-width: 700px;
+    }
+    .mural-content blockquote {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.35;
+      color: var(--cream);
+      margin-bottom: 2rem;
+    }
+    .mural-content cite {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      background: var(--charcoal);
+    }
+    .contact-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .contact-text .section-title { margin-bottom: 1.5rem; }
+    .contact-desc {
+      font-size: 1.1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--bone);
+      margin-bottom: 3rem;
+    }
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid rgba(196,146,58,0.2);
+    }
+    .contact-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid rgba(196,146,58,0.2);
+      text-decoration: none;
+      color: var(--cream);
+      transition: padding-left 0.3s, color 0.3s;
+    }
+    .contact-link:hover {
+      padding-left: 1rem;
+      color: var(--gold);
+    }
+    .contact-link .cl-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
+    }
+    .contact-link .cl-arrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      opacity: 0.5;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .contact-link:hover .cl-arrow {
+      opacity: 1;
+      transform: translateX(6px);
+    }
+    .contact-img-block {
+      position: relative;
+    }
+    .contact-img-block img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      object-position: center 20%;
+      filter: grayscale(30%) contrast(1.05);
+      display: block;
+    }
+    .contact-img-block::before {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: -12px;
+      right: 12px;
+      bottom: 12px;
+      border: 1px solid rgba(196,146,58,0.2);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(196,146,58,0.1);
+    }
+    footer .foot-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.25em;
+      color: var(--dust);
+    }
+    footer .foot-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      color: var(--dust);
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      .hero-content { padding: 0 1.5rem 3rem; }
+      .about { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img img { height: 400px; }
+      .disc-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
+      .gi-1, .gi-2, .gi-3, .gi-4, .gi-5 {
+        grid-column: auto;
+        grid-row: auto;
+        height: 280px;
+      }
+      .gi-3 { height: 280px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-img-block { display: none; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-name" href="#">Harrison Caudill</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-img"></div>
+    <div class="hero-grain"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Model · Actor · Artist · Texas</p>
+      <h1 class="hero-name">
+        Harrison
+        <span>Caudill</span>
+      </h1>
+      <div class="hero-disciplines">
+        <span>Fashion</span>
+        <span class="sep"></span>
+        <span>Editorial</span>
+        <span class="sep"></span>
+        <span>Theater</span>
+        <span class="sep"></span>
+        <span>Visual Arts</span>
+        <span class="sep"></span>
+        <span>Music</span>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" style="padding: 0; background: var(--charcoal);">
+    <div class="about" style="padding: 7rem 3rem;">
+      <div class="about-text-block reveal">
+        <p class="section-label">About</p>
+        <h2 class="section-title" style="margin-bottom: 2rem;">Unapologetically<br>Everything</h2>
+        <p class="about-quote">"I want to be remembered as someone who was unafraid."</p>
+        <p class="about-body">
+          Harrison Caudill is a Texas-based model, actor, musician, and visual artist — not because he couldn't choose, but because he refused to. His work spans the editorial and the gritty, the studio and the overgrown field, the stage and the street.
+        </p>
+        <p class="about-body">
+          Classically trained as a clarinetist (All State), he brings the same precision and emotional range to every medium he touches. His modeling work defies easy categorization — fashion-forward, gender-fluid, unapologetically physical. His acting credits include theater and film, with the ambition to match.
+        </p>
+        <div class="tag-row">
+          <span class="tag">Fashion Modeling</span>
+          <span class="tag">Editorial</span>
+          <span class="tag">Acting</span>
+          <span class="tag">Theater</span>
+          <span class="tag">Music</span>
+          <span class="tag">Visual Art</span>
+          <span class="tag">Houston, TX</span>
+        </div>
+      </div>
+      <div class="about-img reveal reveal-delay-2" data-credit="Studio shoot">
+        <img src="https://lh3.googleusercontent.com/pw/AP1GczPXfiH8liSt6JfZJqYkRWfUML_sZl6C4K2yGsg-0UfXWnEq19QIOiiyukSXMn1Key4EmPf3noD5akdT_7HLNa0YSh_mZdSXkF7_mZBHNAuVrYrtY8TV4aQHeM05lEHL4euW2pozc2fbdHNGElelHPftCQ=w900-k-no" alt="Harrison Caudill editorial">
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="work" class="gallery-section">
+    <div class="gallery-header reveal">
+      <p class="section-label">Portfolio</p>
+      <h2 class="section-title">Selected Work</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item gi-1 reveal">
+        <img src="https://lh3.googleusercontent.com/pw/AP1GczPwjq4k054_ZQbwyaHkjpi007ha2Jf15-8H1drsATl1HwrCUf5zCotyWeHZJc0Ehl_kM930yFqd_Mug6ezm6XJmINTvgENAas5vR9HrgbdABjITv4um_mRbZ4usT9aK3mZ-n_RU1BjHpK7CXYspDhI6Uw=w900-k-no" alt="">
+        <div class="overlay"><span class="gallery-caption">Texas Gothic</span></div>
+      </div>
+      <div class="gallery-item gi-2 reveal reveal-delay-1">
+        <img src="https://lh3.googleusercontent.com/pw/AP1GczNQvR3h6nk8adKWkvgm4JBo-uJhGy3hoGxgfFc962XFNItnBlGlpFra3lySila-xxBpaN4yeLrbw89liBMSR_VtGKurT-4wdXH06-2QYAeErvJt3IatvhYGQDukaInnBzQWh6cMSMsSMc67IYQo0HMP7g=w900-k-no" alt="">
+        <div class="overlay"><span class="gallery-caption">Graveyard Series</span></div>
+      </div>
+      <div class="gallery-item gi-3 reveal reveal-delay-2">
+        <img src="https://lh3.googleusercontent.com/pw/AP1GczPXfiH8liSt6JfZJqYkRWfUML_sZl6C4K2yGsg-0UfXWnEq19QIOiiyukSXMn1Key4EmPf3noD5akdT_7HLNa0YSh_mZdSXkF7_mZBHNAuVrYrtY8TV4aQHeM05lEHL4euW2pozc2fbdHNGElelHPftCQ=w900-k-no" alt="">
+        <div class="overlay"><span class="gallery-caption">Editorial</span></div>
+      </div>
+      <div class="gallery-item gi-4 reveal reveal-delay-1">
+        <img src="https://lh3.googleusercontent.com/pw/AP1GczPWCkjYdYgy6kvEw2ywzaz4TrhSqAyxQfTubBXBD5KIC1SB3LMHN0CLaOS9I-nKXGziKzVeyYbgE4I_viLNFxKwa3bdvu-J0nDAMXd51-d_uT5tZ9mrcPMX5h0KBm2pEyzP9COAopOSMhi8IubapAeI0A=w900-k-no" alt="">
+        <div class="overlay"><span class="gallery-caption">Graveyard Series</span></div>
+      </div>
+      <div class="gallery-item gi-5 reveal reveal-delay-2">
+        <img src="https://lh3.googleusercontent.com/pw/AP1GczPUGVND5j6LIneVfvk1yf10nIX5DXKoJSJAcACv_H_F55EMwOP9CXgW2fVSMS3Fwtw9C01Z0ZkRdI03zgNVXI1l2eBXs4pQxZqLVW5e74GL96O3zkHHvFIC53QlOYZ79X-ZiTsrobZ6KNRbB5XoQe1IfQ=w900-k-no" alt="">
+        <div class="overlay"><span class="gallery-caption">Night Shoot — San Antonio</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCIPLINES -->
+  <section class="disciplines-section">
+    <div class="disciplines-inner">
+      <p class="section-label reveal">Disciplines</p>
+      <h2 class="section-title reveal">What He Does</h2>
+      <div class="disc-grid">
+        <div class="disc-item reveal">
+          <div class="disc-num">01</div>
+          <div class="disc-title">Modeling</div>
+          <p class="disc-desc">Fashion, editorial, and commercial work. Fluid, expressive, and unafraid of the unconventional. Magazine covers, lookbooks, and beyond.</p>
+        </div>
+        <div class="disc-item reveal reveal-delay-1">
+          <div class="disc-num">02</div>
+          <div class="disc-title">Acting</div>
+          <p class="disc-desc">Theater credits include Shrek the Musical. Film work building. The kind of presence that doesn't need to be told to own a room.</p>
+        </div>
+        <div class="disc-item reveal reveal-delay-2">
+          <div class="disc-num">03</div>
+          <div class="disc-title">Music</div>
+          <p class="disc-desc">Classically trained clarinetist. All State. Singer and developing songwriter. Music as another body — inhabited fully or not at all.</p>
+        </div>
+        <div class="disc-item reveal reveal-delay-3">
+          <div class="disc-num">04</div>
+          <div class="disc-title">Visual Art</div>
+          <p class="disc-desc">Painting, sculpture, ceramics, and furniture. The hands need to make things. Lego builds to fine art — medium is just a choice, not a limit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MURAL FEATURE -->
+  <div class="mural-section">
+    <div class="mural-bg"></div>
+    <div class="mural-overlay"></div>
+    <div class="mural-content">
+      <blockquote>
+        "Self-expression isn't a statement. It's just breathing."
+      </blockquote>
+      <cite>— Harrison Caudill, on personal style</cite>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section">
+    <div class="contact-inner">
+      <div class="contact-text reveal">
+        <p class="section-label">Get in Touch</p>
+        <h2 class="section-title">Let's<br>Work</h2>
+        <p class="contact-desc">
+          Available for fashion and editorial shoots, acting projects, live music, and collaborative art. Based in Texas, open everywhere.
+        </p>
+        <div class="contact-links">
+          <a href="https://www.instagram.com/harrycaudill/" target="_blank" class="contact-link">
+            <span class="cl-label">Instagram</span>
+            <span class="cl-arrow">↗</span>
+          </a>
+          <a href="mailto:hello@harrisoncaudill.com" class="contact-link">
+            <span class="cl-label">Email</span>
+            <span class="cl-arrow">↗</span>
+          </a>
+          <a href="#" class="contact-link">
+            <span class="cl-label">Representation</span>
+            <span class="cl-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact-img-block reveal reveal-delay-2">
+        <img src="https://lh3.googleusercontent.com/pw/AP1GczPwjq4k054_ZQbwyaHkjpi007ha2Jf15-8H1drsATl1HwrCUf5zCotyWeHZJc0Ehl_kM930yFqd_Mug6ezm6XJmINTvgENAas5vR9HrgbdABjITv4um_mRbZ4usT9aK3mZ-n_RU1BjHpK7CXYspDhI6Uw=w900-k-no" alt="Harrison Caudill">
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="foot-name">Harrison Caudill</span>
+    <span class="foot-copy">© 2026 · All rights reserved</span>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0;
+    let ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top = mouseY + 'px';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
