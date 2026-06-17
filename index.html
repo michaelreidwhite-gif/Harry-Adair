@@ -342,20 +342,18 @@
       gap: 6px;
     }
     .gallery-item {
-      overflow: hidden;
       position: relative;
       background: var(--charcoal);
     }
     .gallery-item img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
       display: block;
       transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
       filter: grayscale(15%) contrast(1.05);
     }
     .gallery-item:hover img {
-      transform: scale(1.06);
+      transform: scale(1.02);
       filter: grayscale(0%) contrast(1.1);
     }
     .gallery-item .overlay {
@@ -386,11 +384,11 @@
     }
 
     /* Grid layout - editorial asymmetry */
-    .gi-1 { grid-column: 1 / 6; grid-row: 1; height: 520px; }
-    .gi-2 { grid-column: 6 / 10; grid-row: 1; height: 520px; }
-    .gi-3 { grid-column: 10 / 13; grid-row: 1 / 3; height: 800px; }
-    .gi-4 { grid-column: 1 / 4; grid-row: 2; height: 280px; }
-    .gi-5 { grid-column: 4 / 10; grid-row: 2; height: 280px; }
+    .gi-1 { grid-column: 1 / 6; }
+    .gi-2 { grid-column: 6 / 10; }
+    .gi-3 { grid-column: 10 / 13; }
+    .gi-4 { grid-column: 1 / 4; }
+    .gi-5 { grid-column: 4 / 10; }
 
     /* ── DISCIPLINES ── */
     .disciplines-section {
@@ -615,9 +613,7 @@
       .gi-1, .gi-2, .gi-3, .gi-4, .gi-5 {
         grid-column: auto;
         grid-row: auto;
-        height: 280px;
       }
-      .gi-3 { height: 280px; }
       .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
       .contact-img-block { display: none; }
       footer { flex-direction: column; gap: 1rem; text-align: center; }
@@ -790,15 +786,15 @@
         <img src="https://lh3.googleusercontent.com/pw/AP1GczPeUULAf22Hwelj3s6rJM-NgnC9g9wKKlUZxocyFxmqa52PW7fncAAZTw4cUsIfuH77P6wYZN-SM9iHPQrl5bNTtOnllwz2I919OPaYJjLEEUHORIxDD5Gq5wgfeW9NRqRo9I-p78Ffs5ZdqwUJvYW6UA=w900-k-no" alt="">
         <div class="overlay"><span class="gallery-caption">Window Series</span></div>
       </div>
-      <div class="gallery-item reveal" style="grid-column: 1 / 7; height: 420px;">
+      <div class="gallery-item reveal" style="grid-column: 1 / 7;">
         <img src="https://lh3.googleusercontent.com/pw/AP1GczO8TUMLFrnAzZKOaXyZAJ2zdHBcweDtxU_S0KYaF7TFMBkeyGYTqGWwvDd1eud1PHJ0anH3tIDh9rr2qxJnSFhjwixZ8A9ttnp5pcgbLZf6ArRBuUga=w900-k-no" alt="">
         <div class="overlay"><span class="gallery-caption">Interior</span></div>
       </div>
-      <div class="gallery-item reveal reveal-delay-1" style="grid-column: 7 / 13; height: 420px;">
+      <div class="gallery-item reveal reveal-delay-1" style="grid-column: 7 / 13;">
         <img src="https://lh3.googleusercontent.com/pw/AP1GczPY3sTH5B6Yd3MdNsiFvw5RbYUeKZKqQfl8NQcNq9QwfddMqqGbX7JAg0ou0QIvZ_vp5SAjY2XnyBmstZST0_4YtM7r40HzH5oclKqGhioG9aPlj6Z85DlZHEajYxI_51hEzs5Oh194Og4TN4uh4ujdhQ=w900-k-no" alt="">
         <div class="overlay"><span class="gallery-caption">Window Series II</span></div>
       </div>
-      <div class="gallery-item reveal" style="grid-column: 1 / 13; height: 480px;">
+      <div class="gallery-item reveal" style="grid-column: 1 / 13;">
         <img src="https://lh3.googleusercontent.com/pw/AP1GczPy2U52-gPshm3QKcHoNlpNFVzLvOOz_IfIF15vK7LNCH3hUnTm06i3hF6f5dVVHoKyA3FlI3wRb5NMTTBP3EzoDAM7Yw2dBplIi0_lLYdBjZ3n1hJrAbdtF3V9sY2GQpzGmxi4lK1p-tT3NCeKp0KiQQ=w1400-k-no" alt="">
         <div class="overlay"><span class="gallery-caption">Figure Study</span></div>
       </div>
